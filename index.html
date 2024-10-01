@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código Fonético</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Juego Educativo - Código Fonético</h1>
+    </header>
+
+    <div class="container">
+        <main>
+            <div id="game">
+                <p id="instruction">Codifica la palabra: <span id="random-word"></span></p>
+                <input type="text" id="user-input" placeholder="Tu traducción aquí">
+                <button id="submit-btn">Enviar</button>
+                <button id="hint-btn">Ver Diccionario</button>
+                <p id="result"></p>
+                <p id="streak"></p>
+            </div>
+
+            <div id="dictionary" class="hidden">
+                <h3>Diccionario del alfabeto fonético:</h3>
+                <ul id="alphabet-list"></ul>
+                <button id="close-dictionary">Cerrar Diccionario</button>
+            </div>
+        </main>
+
+        <footer>
+            <button id="play-again">¿Intentar de nuevo?</button>
+        </footer>
+    </div>
+
+    <footer id="credits">
+        <p>Creado por: Hernán Brué, 2024</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
