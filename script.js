@@ -44,40 +44,37 @@ function getRandomWord() {
 // Función para cargar las palabras desde el archivo JSON
 function loadWords() {
   fetch('spanish_words.json')
-      .then(response => response.json())
-      .then(data => {
-          words = data.words;
-          currentWord = getRandomWord();
-          updateUI();
-      })
-      .catch(error => {
-          console.error("Error al cargar el archivo de palabras:", error);
-      });
+    .then(response => response.json())
+    .then(data => {
+      words = data.words.filter(word => !word.includes('ñ') && !word.includes('Ñ'));
+      currentWord = getRandomWord();
+      updateUI();
+    })
+    .catch(error => {
+      console.error("Error al cargar el archivo de palabras:", error);
+    });
 }
 
 function codifyWord(word) {
   let translation = "";
   for (let letter of word.toUpperCase()) {
-      if (alphabetQ[letter]) {
-          translation += alphabetQ[letter] + " "; // Usar espacio en lugar de "_"
-      }
+    if (alphabetQ[letter]) {
+      translation += alphabetQ[letter] + " "; 
+    }
   }
-  return translation.trim(); // Eliminar el último espacio
+  return translation.trim();
 }
 
 function normalizeInput(input) {
   return input
-      .replace(/_/g, " ")      // Reemplaza guiones bajos por espacios
-      .trim()                  // Elimina espacios innecesarios al principio y final
-      .toLowerCase();          // Convierte todo a minúsculas
+    .replace(/_/g, " ")      
+    .trim()                  
+    .toLowerCase();          
 }
 
 function compareAnswers(userTranslation, correctTranslation) {
-  // Normalizar las respuestas y convertirlas en arrays
   const userWords = userTranslation.split(" ").sort();
   const correctWords = correctTranslation.split(" ").sort();
-
-  // Comparar las palabras
   return JSON.stringify(userWords) === JSON.stringify(correctWords);
 }
 
@@ -91,9 +88,9 @@ function showDictionary() {
   const list = document.getElementById('alphabet-list');
   list.innerHTML = "";
   for (let letter in alphabetQ) {
-      const listItem = document.createElement('li');
-      listItem.textContent = `${letter}: ${alphabetQ[letter]}`;
-      list.appendChild(listItem);
+    const listItem = document.createElement('li');
+    listItem.textContent = `${letter}: ${alphabetQ[letter]}`;
+    list.appendChild(listItem);
   }
   document.getElementById('dictionary').classList.remove('hidden');
 }
@@ -107,13 +104,13 @@ document.getElementById('submit-btn').addEventListener('click', () => {
   const correctTranslation = normalizeInput(codifyWord(currentWord));
 
   if (compareAnswers(userTranslation, correctTranslation)) {
-      streak++;
-      document.getElementById('result').textContent = "¡Correcto!";
-      document.getElementById('streak').textContent = `Streak actual: ${streak}`;
+    streak++;
+    document.getElementById('result').textContent = "¡Correcto!";
+    document.getElementById('streak').textContent = `Streak actual: ${streak}`;
   } else {
-      document.getElementById('result').textContent = `Incorrecto. La traducción correcta era: ${correctTranslation}`;
-      document.getElementById('streak').textContent = `Tu streak se ha reiniciado.`;
-      streak = 0;
+    document.getElementById('result').textContent = `Incorrecto. La traducción correcta era: ${correctTranslation}`;
+    document.getElementById('streak').textContent = `Tu streak se ha reiniciado.`;
+    streak = 0;
   }
 });
 
