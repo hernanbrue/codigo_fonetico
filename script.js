@@ -36,12 +36,10 @@ let streak = 0;
 let currentWord = "";
 let words = [];
 
-// Función para obtener una palabra aleatoria
 function getRandomWord() {
   return words[Math.floor(Math.random() * words.length)];
 }
 
-// Función para cargar las palabras desde el archivo JSON
 function loadWords() {
   fetch('spanish_words.json')
     .then(response => response.json())
@@ -73,9 +71,36 @@ function normalizeInput(input) {
 }
 
 function compareAnswers(userTranslation, correctTranslation) {
-  const userWords = userTranslation.split(" ").sort();
-  const correctWords = correctTranslation.split(" ").sort();
-  return JSON.stringify(userWords) === JSON.stringify(correctWords);
+  const userWords = userTranslation.split(" ").map(word => word.trim());
+  const correctWords = correctTranslation.split(" ").map(word => word.trim());
+
+  for (const userWord of userWords) {
+    let foundMatch = false;
+    for (const correctWord of correctWords) {
+      if (userWord === correctWord || areEquivalent(userWord, correctWord)) {
+        foundMatch = true;
+        break;
+      }
+    }
+    if (!foundMatch) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function areEquivalent(word1, word2) {
+  const equivalences = {
+    'alfa': 'alpha',
+    'alpha': 'alfa',
+    'eco': 'echo',
+    'echo': 'eco'
+  };
+
+  return word1 === word2 || 
+         (equivalences[word1] && equivalences[word1] === word2) || 
+         (equivalences[word2] && equivalences[word2] === word1);
 }
 
 function updateUI() {
